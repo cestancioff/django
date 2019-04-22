@@ -8,6 +8,12 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import dj_database_url
+
+if os.environ.get('DEVELOPMENT'): 
+    development = True
+else:
+    development = False
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1l$8fq680xo2p0ck%b=&ux^$$g$d6ys*@54vb72jqa@*r8kua2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = development
 
 # Make sure to use your own hostname here, and/or use`127.0.0.1` for
 # localhost
@@ -73,13 +79,15 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if development:
+    DATABASES = {
+        'default' : {
+        |'ENGINE':'django.db.backends.sqlite3',
+        'NAME': os.path.join(Base_DIR, 'db.sqlite3'),
     }
 }
-
+else:
+    DATABASES = { 'default': dj_database_url.parse(os.environ.get('postgres://uktvnhbhcygjtu:c23f5b942ea0f0975a1321c5e885d83b0c5767f2b438acf9c97d3cec97e248b4@ec2-54-247-85-251.eu-west-1.compute.amazonaws.com:5432/daegb8lvah01oc'))}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
